@@ -75,10 +75,52 @@ Compare the original modulating signal with the demodulated signal. PROCEDURE
 •	Verify the generated waveform using Tabulation and Model Waveform
 
 Program
+clc;
+clear;
+close;
+Am = 8.8;          // Message amplitude
+Ac = 17.6;         // Carrier amplitude
+Fm = 540;          // Message frequency
+Fc = 5400;         // Carrier frequency
+Fs = 54000;        // Sampling frequency
+
+t = 0:1/Fs:0.005;  // 5 ms duration (can increase if needed)
+
+//// Message signal
+m = Am * sin(2 * %pi * Fm * t);
+
+//// Carrier signal
+c = Ac * sin(2 * %pi * Fc * t);
+
+//// AM modulated signal
+s = Ac * (1 + (Am/Ac) * sin(2 * %pi * Fm * t)) .* sin(2 * %pi * Fc * t);
+subplot(3,1,1)
+plot(t, m)
+title('Message Signal')
+xlabel('Time (s)')
+ylabel('Amplitude')
+xgrid()
+subplot(3,1,2)
+plot(t, c)
+title('Carrier Signal')
+xlabel('Time (s)')
+ylabel('Amplitude')
+xgrid()
+subplot(3,1,3)
+plot(t, s)
+title('AM Modulated Signal')
+xlabel('Time (s)')
+ylabel('Amplitude')
+xgrid()
+disp("   Time(s)        Message(V)        Carrier(V)        Modulated(V)");
+for i=1:10:length(t) // Display every 10th sample for brevity
+    mprintf("%10.6f    %10.4f    %10.4f    %10.4f\n", t(i), m(i), c(i), s(i));
+end
 
 
 
 Output Waveform
+<img width="759" height="728" alt="Screenshot 2025-10-30 083522" src="https://github.com/user-attachments/assets/be9c9d14-e353-4df1-9919-41aa65cb0725" />
 
 
 
@@ -86,11 +128,12 @@ Output Waveform
 
 TABULATION:
 
+<img width="1280" height="857" alt="image" src="https://github.com/user-attachments/assets/f90b5304-82c1-4b85-bc15-388593ecfbaa" />
 
 
 Calculation
-1.	ma (Theory) = am/ac =
-2.	ma(Practical) = (Emax-Emin)/(Emax+Emin) =
+1.	ma (Theory) = am/ac =8.8/17.6=0.5
+2.	ma(Practical) = (Emax-Emin)/(Emax+Emin) =(26.4-8.8)/(26.4+8.8)=0.5
 
 
 MODEL GRAPH
